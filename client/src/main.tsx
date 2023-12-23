@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
+
 import ScopedCssBaseline from "@mui/material/ScopedCssBaseline";
 import { ThemeProvider, createTheme } from "@mui/material";
 import "./index.scss";
@@ -22,5 +23,4 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <ThemeProvider theme={darkTheme}>
       <App />
     </ThemeProvider>
-  </React.StrictMode>
-);
+
