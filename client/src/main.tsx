@@ -23,4 +23,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <ThemeProvider theme={darkTheme}>
       <App />
     </ThemeProvider>
-
+  </React.StrictMode>
+);
