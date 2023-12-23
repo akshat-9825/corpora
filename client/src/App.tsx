@@ -1,7 +1,21 @@
-import "./App.scss";
+import Layout from "./layout";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
-  return <div className="text-3xl font-bold underline">Hello</div>;
+  return (
+    <BrowserRouter>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<>Hello</>} />
+          <Route path="/profile" element={<>profile</>} />
+          <Route path="/search" element={<>search</>} />
+          <Route path="/trending" element={<>trending</>} />
+          <Route path="/create" element={<>create</>} />
+          <Route path="/*" element={<>Not available</>} />
+        </Routes>
+      </Layout>
+    </BrowserRouter>
+  );
 }
 
 export default App;
