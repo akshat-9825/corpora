@@ -1,9 +1,8 @@
-import Layout from "./layout";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-        
-import "./App.scss";
+import Authentication from "./components/Authentication";
+import Layout from "./layout";
 
-function App() {
+function CorporaRoutes() {
   return (
     <BrowserRouter>
       <Layout>
@@ -14,10 +13,12 @@ function App() {
           <Route path="/trending" element={<>trending</>} />
           <Route path="/create" element={<>create</>} />
           <Route path="/*" element={<>Not available</>} />
+          <Route path="/login" element={<Authentication type="login" />} />
+          <Route path="/signup" element={<Authentication type="signup" />} />
         </Routes>
       </Layout>
     </BrowserRouter>
   );
 }
 
-export default App;
+export default CorporaRoutes;
