@@ -26,7 +26,7 @@ const IconGroup = ({
       {children}
       <Typography
         sx={{
-          color: theme.palette.primary.light,
+          color: theme.palette.primary.main,
           fontSize: "16px",
           textAlign: "center",
         }}>

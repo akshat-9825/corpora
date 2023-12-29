@@ -1,15 +1,4 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  Checkbox,
-  FormControlLabel,
-  Grid,
-  Paper,
-  TextField,
-  Typography,
-} from "@mui/material";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { Box, Button, TextField, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
 
 interface AuthenticationType {
@@ -17,7 +6,7 @@ interface AuthenticationType {
 }
 
 const Authentication = ({ type }: AuthenticationType) => {
-  console.log(type);
+  const theme = useTheme();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -28,88 +17,161 @@ const Authentication = ({ type }: AuthenticationType) => {
   };
 
   return (
-    <Grid container component="main" sx={{ height: "100vh", width: "100%" }}>
-      <Grid
-        item
-        xs={false}
-        sm={4}
-        md={7}
+    <Box sx={{ display: "flex", justifyContent: "center" }}>
+      <Box
         sx={{
-          backgroundImage: "url(https://source.unsplash.com/random?wallpapers)",
-          backgroundRepeat: "no-repeat",
-          backgroundColor: (t) =>
-            t.palette.mode === "light"
-              ? t.palette.grey[50]
-              : t.palette.grey[900],
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      />
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+          my: 8,
+          mx: 4,
+          display: "flex",
+          flexDirection: "column",
+          width: "fit-contents",
+        }}>
         <Box
           sx={{
-            my: 8,
-            mx: 4,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+            alignSelf: "flex-start",
+            [theme.breakpoints.down("tablet")]: {
+              alignSelf: "center",
+              textAlign: "center",
+            },
           }}>
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
+          <Typography
+            sx={{
+              fontSize: "48px",
+              color: "white",
+              fontFamily: "DM Serif Display",
+            }}>
+            Welcome
           </Typography>
+          <Typography
+            sx={{
+              color: "#A5A5A5",
+              fontFamily: "Lexend Deca",
+              fontSize: "24px",
+              fontWeight: "300",
+            }}>
+            {type === "login"
+              ? "Let's log you in quickly"
+              : "Let's sign you up quickly"}
+          </Typography>
+        </Box>
+        <Box
+          component="form"
+          noValidate
+          onSubmit={handleSubmit}
+          sx={{ mt: "37px" }}>
+          <TextField
+            margin="normal"
+            fullWidth
+            id="email"
+            label="Enter your email"
+            name="email"
+            autoComplete="email"
+            autoFocus
+            sx={{
+              my: 0,
+            }}
+          />
+          <TextField
+            margin="normal"
+            fullWidth
+            name="password"
+            label="Enter your password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            sx={{
+              my: "22px",
+            }}
+          />
           <Box
-            component="form"
-            noValidate
-            onSubmit={handleSubmit}
-            sx={{ mt: 1 }}>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}>
-              Sign In
-            </Button>
-            <Grid container>
-              <Grid item xs>
-                {/* <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link> */}
-              </Grid>
-              <Grid item>
-                <Link to="/signup">{"Don't have an account? Sign Up"}</Link>
-              </Grid>
-            </Grid>
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              gap: 4,
+              [theme.breakpoints.down("tablet")]: {
+                flexDirection: "column",
+              },
+            }}>
+            <Box>
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{
+                  width: "180px",
+                  height: "60px",
+                  ":hover": {
+                    bgcolor: theme.palette.primary.main,
+                  },
+                  borderRadius: 0,
+                  fontWeight: "600",
+                  [theme.breakpoints.down("tablet")]: {
+                    height: "52px",
+                    width: "100%",
+                  },
+                }}>
+                {type === "login" ? "LOGIN" : "SUBMIT"}
+              </Button>
+            </Box>
+            <Box>
+              {type === "login" ? (
+                <Typography
+                  sx={{
+                    color: "#FFF",
+                    fontFamily: "Lexend Deca",
+                    fontSize: "20px",
+                    fontWeight: "400",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}>
+                  don't have an account?
+                  <Button
+                    variant="text"
+                    sx={{
+                      color: "#6EEB83",
+                      fontFamily: "Lexend Deca",
+                      fontSize: "20px",
+                      fontWeight: "400",
+                      textTransform: "none",
+                      p: 0,
+                      justifyContent: "flex-start",
+                      width: "fit-content",
+                    }}>
+                    <Link to="/signup">sign-up</Link>
+                  </Button>
+                </Typography>
+              ) : (
+                <Typography
+                  sx={{
+                    color: "#FFF",
+                    fontFamily: "Lexend Deca",
+                    fontSize: "20px",
+                    fontWeight: "400",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}>
+                  already have an account?
+                  <Button
+                    variant="text"
+                    sx={{
+                      color: "#6EEB83",
+                      fontFamily: "Lexend Deca",
+                      fontSize: "20px",
+                      fontWeight: "400",
+                      textTransform: "none",
+                      p: 0,
+                      justifyContent: "flex-start",
+                      width: "fit-content",
+                    }}>
+                    <Link to="/login">sign-in</Link>
+                  </Button>
+                </Typography>
+              )}
+            </Box>
           </Box>
         </Box>
-      </Grid>
-    </Grid>
+      </Box>
+    </Box>
   );
 };
 
