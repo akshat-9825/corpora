@@ -5,6 +5,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { Link, useLocation } from "react-router-dom";
+import LoginIcon from "@mui/icons-material/Login";
 const Layout = ({ children }: { children: ReactNode }) => {
   const theme = useTheme();
   const location = useLocation();
@@ -40,7 +41,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
                   color: theme.palette.primary.dark,
                   cursor: "pointer",
                 }}>
-                A
+                <LoginIcon height="32px" width="32px" />
               </Avatar>
             </Link>
             <Link to="/search">
