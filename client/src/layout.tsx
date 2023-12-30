@@ -29,7 +29,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
               width: "95px",
               alignItems: "center",
             }}>
-            <Link to="/profile">
+            <Link to="/login">
               <Avatar
                 sx={{
                   bgcolor: theme.palette.primary.main,
