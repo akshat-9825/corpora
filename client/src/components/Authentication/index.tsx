@@ -12,7 +12,9 @@ const Authentication = ({ type }: AuthenticationType) => {
     const data = new FormData(event.currentTarget);
     console.log({
       email: data.get("email"),
+      name: data.get("name"),
       password: data.get("password"),
+      confirmPassword: data.get("confirm_password"),
     });
   };
 
@@ -24,7 +26,10 @@ const Authentication = ({ type }: AuthenticationType) => {
           mx: 4,
           display: "flex",
           flexDirection: "column",
-          width: "fit-contents",
+          width: "50%",
+          [theme.breakpoints.down("tablet")]: {
+            width: "100%",
+          },
         }}>
         <Box
           sx={{
@@ -71,6 +76,20 @@ const Authentication = ({ type }: AuthenticationType) => {
               my: 0,
             }}
           />
+          {type === "signup" ? (
+            <TextField
+              margin="normal"
+              fullWidth
+              id="name"
+              label="Enter your name"
+              name="name"
+              autoComplete="name"
+              sx={{
+                mt: "22px",
+                mb: 0,
+              }}
+            />
+          ) : null}
           <TextField
             margin="normal"
             fullWidth
@@ -78,11 +97,24 @@ const Authentication = ({ type }: AuthenticationType) => {
             label="Enter your password"
             type="password"
             id="password"
-            autoComplete="current-password"
             sx={{
               my: "22px",
             }}
           />
+          {type === "signup" ? (
+            <TextField
+              margin="normal"
+              fullWidth
+              name="confirm_password"
+              label="Confirm password"
+              type="password"
+              id="confirm_password"
+              sx={{
+                mt: 0,
+                mb: "22px",
+              }}
+            />
+          ) : null}
           <Box
             sx={{
               display: "flex",
