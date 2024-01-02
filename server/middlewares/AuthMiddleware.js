@@ -2,6 +2,13 @@ const User = require("../models/Users");
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
+/**
+ * Verifies if a user is authenticated.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @return {Object} A JSON object indicating the verification status and, if successful, the username of the user.
+ */
 module.exports.userVerification = (req, res) => {
   const token = req.cookies.token;
   if (!token) {

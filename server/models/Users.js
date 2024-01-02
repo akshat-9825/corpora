@@ -4,12 +4,12 @@ const bcrypt = require("bcryptjs");
 const userSchema = new mongoose.Schema({
   email: {
     type: String,
-    required: [true, "Your email address is required"],
     unique: true,
   },
   phone: {
     type: Number,
     unique: true,
+    sparse: true,
   },
   username: {
     type: String,
@@ -22,6 +22,11 @@ const userSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: new Date(),
+  },
+  type: {
+    type: String,
+    enum: ["user", "admin"],
+    default: "user",
   },
 });
 
