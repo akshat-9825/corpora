@@ -141,6 +141,9 @@ module.exports.Delete = (req, res) => {
   });
 };
 
+/**
+ * Modify function modifies the username of a user.
+ */
 module.exports.Modify = (req, res) => {
   const token = req.cookies.token;
   const { new_name } = req.body;

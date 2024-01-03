@@ -1,22 +1,46 @@
+import { useMutation } from "react-query";
 import { Box, Button, TextField, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
-
+import { SignUpDataType, SignupApiCall } from "./apis";
+import { useCallback } from "react";
 interface AuthenticationType {
   type: "login" | "signup";
 }
 
 const Authentication = ({ type }: AuthenticationType) => {
   const theme = useTheme();
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      name: data.get("name"),
-      password: data.get("password"),
-      confirmPassword: data.get("confirm_password"),
-    });
-  };
+  const mutation = useMutation((data: SignUpDataType) => SignupApiCall(data));
+
+  const submitData = useCallback(
+    (SignupData: SignUpDataType) => {
+      mutation.mutate(SignupData);
+    },
+    [mutation]
+  );
+
+  const handleSubmit = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      const data = new FormData(event.currentTarget);
+      console.log({
+        email: data.get("email"),
+        name: data.get("name"),
+        password: data.get("password"),
+        confirmPassword: data.get("confirm_password"),
+      });
+      if (data.get("password") === data.get("confirm_password")) {
+        submitData({
+          email: data.get("email") as string,
+          username: data.get("name") as string,
+          password: data.get("password") as string,
+          confirm_password: data.get("confirm_password") as string,
+        });
+      } else {
+        alert("Passwords do not match");
+      }
+    },
+    [submitData]
+  );
 
   return (
     <Box sx={{ display: "flex", justifyContent: "center" }}>

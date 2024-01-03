@@ -1,9 +1,9 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import CorporaRoutes from "./CorporaRoutes.tsx";
-
-import ScopedCssBaseline from "@mui/material/ScopedCssBaseline";
+import { StrictMode } from "react";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { ThemeProvider, createTheme } from "@mui/material";
+import ReactDOM from "react-dom/client";
+import ScopedCssBaseline from "@mui/material/ScopedCssBaseline";
+import CorporaRoutes from "./CorporaRoutes.tsx";
 import "./index.scss";
 
 declare module "@mui/material/styles" {
@@ -20,6 +20,8 @@ declare module "@mui/material/styles" {
     largeDesktop: true;
   }
 }
+
+const queryClient = new QueryClient();
 
 const darkTheme = createTheme({
   palette: {
@@ -42,10 +44,12 @@ const darkTheme = createTheme({
 });
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
+  <StrictMode>
     <ScopedCssBaseline />
-    <ThemeProvider theme={darkTheme}>
-      <CorporaRoutes />
-    </ThemeProvider>
-  </React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={darkTheme}>
+        <CorporaRoutes />
+      </ThemeProvider>
+    </QueryClientProvider>
+  </StrictMode>
 );
