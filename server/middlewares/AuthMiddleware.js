@@ -10,7 +10,6 @@ const jwt = require("jsonwebtoken");
  * @return {Object} A JSON object indicating the verification status and, if successful, user data.
  */
 module.exports.userVerification = (req, res) => {
-  console.log(req.cookies);
   const token = req.cookies.token;
   if (!token) {
     return res.json({ status: false });
