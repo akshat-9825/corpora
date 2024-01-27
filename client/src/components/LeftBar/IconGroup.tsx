@@ -27,7 +27,7 @@ const IconGroup = ({
       <Typography
         sx={{
           color: theme.palette.primary.main,
-          fontSize: "16px",
+          fontSize: "1.6rem",
           textAlign: "center",
         }}>
         {text}

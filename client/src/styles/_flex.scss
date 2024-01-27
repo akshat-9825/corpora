@@ -1,0 +1,32 @@
+@mixin flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+@mixin flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin flex-row-reverse {
+  @include flex-row;
+
+  flex-direction: row-reverse;
+}
+
+@mixin text-c {
+  text-align: center;
+}
+
+@mixin justify-c {
+  justify-content: center;
+}
+
+@mixin align-c {
+  align-items: center;
+}
+
+@mixin flex-c {
+  @include align-c;
+  @include justify-c;
+}

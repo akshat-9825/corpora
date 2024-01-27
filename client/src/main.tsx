@@ -4,7 +4,7 @@ import { ThemeProvider, createTheme } from "@mui/material";
 import ReactDOM from "react-dom/client";
 import ScopedCssBaseline from "@mui/material/ScopedCssBaseline";
 import CorporaRoutes from "./CorporaRoutes.tsx";
-import "./index.scss";
+import "./styles/global.scss";
 
 declare module "@mui/material/styles" {
   interface BreakpointOverrides {
@@ -39,6 +39,24 @@ const darkTheme = createTheme({
       laptop: 1024,
       desktop: 1200,
       largeDesktop: 1440,
+    },
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          fontSize: "1.6rem",
+        },
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          ".MuiTextField-root.MuiTextField-root": {
+            fontSize: "1.6rem",
+          },
+        },
+      },
     },
   },
 });

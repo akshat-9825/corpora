@@ -43,13 +43,12 @@ const Authentication = ({ type }: AuthenticationType) => {
   );
 
   return (
-    <Box sx={{ display: "flex", justifyContent: "center" }}>
+    <Box className="column flex-c">
       <Box
+        className="column"
         sx={{
           my: 8,
           mx: 4,
-          display: "flex",
-          flexDirection: "column",
           width: "50%",
           [theme.breakpoints.down("tablet")]: {
             width: "100%",
@@ -65,7 +64,7 @@ const Authentication = ({ type }: AuthenticationType) => {
           }}>
           <Typography
             sx={{
-              fontSize: "48px",
+              fontSize: "4.8rem",
               color: "white",
               fontFamily: "DM Serif Display",
             }}>
@@ -75,7 +74,7 @@ const Authentication = ({ type }: AuthenticationType) => {
             sx={{
               color: "#A5A5A5",
               fontFamily: "Lexend Deca",
-              fontSize: "24px",
+              fontSize: "2.4rem",
               fontWeight: "300",
             }}>
             {type === "login"
@@ -87,7 +86,7 @@ const Authentication = ({ type }: AuthenticationType) => {
           component="form"
           noValidate
           onSubmit={handleSubmit}
-          sx={{ mt: "37px" }}>
+          sx={{ mt: "3.7rem" }}>
           <TextField
             margin="normal"
             fullWidth
@@ -109,8 +108,9 @@ const Authentication = ({ type }: AuthenticationType) => {
               name="name"
               autoComplete="name"
               sx={{
-                mt: "22px",
+                mt: "2.2rem",
                 mb: 0,
+                fontSize: "1.6rem",
               }}
             />
           ) : null}
@@ -122,7 +122,8 @@ const Authentication = ({ type }: AuthenticationType) => {
             type="password"
             id="password"
             sx={{
-              my: "22px",
+              my: "2.2rem",
+              fontSize: "1.6rem",
             }}
           />
           {type === "signup" ? (
@@ -135,15 +136,14 @@ const Authentication = ({ type }: AuthenticationType) => {
               id="confirm_password"
               sx={{
                 mt: 0,
-                mb: "22px",
+                mb: "2.2rem",
+                fontSize: "1.6rem",
               }}
             />
           ) : null}
           <Box
+            className="row space-between"
             sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
               gap: 4,
               [theme.breakpoints.down("tablet")]: {
                 flexDirection: "column",
@@ -154,15 +154,15 @@ const Authentication = ({ type }: AuthenticationType) => {
                 type="submit"
                 variant="contained"
                 sx={{
-                  width: "180px",
-                  height: "60px",
+                  width: "18rem",
+                  height: "6rem",
                   ":hover": {
                     bgcolor: theme.palette.primary.main,
                   },
                   borderRadius: 0,
                   fontWeight: "600",
                   [theme.breakpoints.down("tablet")]: {
-                    height: "52px",
+                    height: "5.2rem",
                     width: "100%",
                   },
                 }}>
@@ -172,13 +172,12 @@ const Authentication = ({ type }: AuthenticationType) => {
             <Box>
               {type === "login" ? (
                 <Typography
+                  className="column"
                   sx={{
                     color: "#FFF",
                     fontFamily: "Lexend Deca",
-                    fontSize: "20px",
+                    fontSize: "2rem",
                     fontWeight: "400",
-                    display: "flex",
-                    flexDirection: "column",
                   }}>
                   don't have an account?
                   <Button
@@ -186,7 +185,7 @@ const Authentication = ({ type }: AuthenticationType) => {
                     sx={{
                       color: "#6EEB83",
                       fontFamily: "Lexend Deca",
-                      fontSize: "20px",
+                      fontSize: "2rem",
                       fontWeight: "400",
                       textTransform: "none",
                       p: 0,
@@ -198,13 +197,12 @@ const Authentication = ({ type }: AuthenticationType) => {
                 </Typography>
               ) : (
                 <Typography
+                  className="column"
                   sx={{
                     color: "#FFF",
                     fontFamily: "Lexend Deca",
-                    fontSize: "20px",
+                    fontSize: "2rem",
                     fontWeight: "400",
-                    display: "flex",
-                    flexDirection: "column",
                   }}>
                   already have an account?
                   <Button
@@ -212,7 +210,7 @@ const Authentication = ({ type }: AuthenticationType) => {
                     sx={{
                       color: "#6EEB83",
                       fontFamily: "Lexend Deca",
-                      fontSize: "20px",
+                      fontSize: "2rem",
                       fontWeight: "400",
                       textTransform: "none",
                       p: 0,
