@@ -13,16 +13,7 @@ const IconGroup = ({
   const theme = useTheme();
 
   return (
-    <Box
-      className={className}
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        flexDirection: "column",
-        alignContent: "center",
-        width: "100%",
-        cursor: "pointer",
-      }}>
+    <Box className={`${className} column flex-c full-width cursor`}>
       {children}
       <Typography
         sx={{

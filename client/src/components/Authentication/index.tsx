@@ -1,59 +1,163 @@
+import { useCallback, useState } from "react";
 import { useMutation } from "react-query";
-import { Box, Button, TextField, Typography, useTheme } from "@mui/material";
-import { Link } from "react-router-dom";
-import { SignUpDataType, SignupApiCall } from "./apis";
-import { useCallback } from "react";
-interface AuthenticationType {
-  type: "login" | "signup";
-}
+import {
+  Box,
+  Button,
+  Snackbar,
+  TextField,
+  Typography,
+  useTheme,
+} from "@mui/material";
+import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
+import { Link, useNavigate } from "react-router-dom";
+import { LoginApiCall, SignupApiCall } from "./apis";
+import {
+  AuthenticationType,
+  LoginDataType,
+  SignUpDataType,
+  SlideTransition,
+} from "./utils";
 
 const Authentication = ({ type }: AuthenticationType) => {
   const theme = useTheme();
-  const mutation = useMutation((data: SignUpDataType) => SignupApiCall(data));
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const [snackBarMessage, setSnackBarMessage] = useState("");
 
-  const submitData = useCallback(
-    (SignupData: SignUpDataType) => {
-      mutation.mutate(SignupData);
-    },
-    [mutation]
+  const useSignUpMutation = useMutation((data: SignUpDataType) =>
+    SignupApiCall(data)
+  );
+
+  const useLoginMutation = useMutation((data: LoginDataType) =>
+    LoginApiCall(data)
   );
 
   const handleSubmit = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
-      console.log({
-        email: data.get("email"),
-        name: data.get("name"),
-        password: data.get("password"),
-        confirmPassword: data.get("confirm_password"),
-      });
-      if (data.get("password") === data.get("confirm_password")) {
-        submitData({
-          email: data.get("email") as string,
-          username: data.get("name") as string,
-          password: data.get("password") as string,
-          confirm_password: data.get("confirm_password") as string,
-        });
-      } else {
-        alert("Passwords do not match");
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const email = data.get("email") as string;
+      if (!emailRegex.test(email)) {
+        setSnackBarMessage("Invalid email address");
+        setOpen(true);
+        return;
       }
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+      const password = data.get("password") as string;
+      if (password === "") {
+        setSnackBarMessage("Password cannot be empty");
+        setOpen(true);
+        return;
+      }
+      if (!passwordRegex.test(password)) {
+        setSnackBarMessage(
+          "Invalid password. Password must be at least 8 characters long and include at least" +
+            "one uppercase letter, one lowercase letter, and one digit."
+        );
+        setOpen(true);
+        return;
+      }
+      if (type === "login") {
+        useLoginMutation.mutate(
+          {
+            email,
+            password,
+          },
+          {
+            onSuccess: () => {
+              setSnackBarMessage("Login successful!");
+              setOpen(true);
+              setTimeout(() => {
+                navigate("/");
+              }, 1000);
+            },
+            onError: (error) => {
+              setSnackBarMessage("Login failed!" + error);
+              setOpen(true);
+            },
+          }
+        );
+        return;
+      }
+      const confirmPassword = data.get("confirm_password") as string;
+      if (password !== confirmPassword) {
+        setSnackBarMessage("Passwords do not match");
+        setOpen(true);
+        return;
+      }
+      useSignUpMutation.mutate(
+        {
+          email,
+          username: data.get("name") as string,
+          password,
+          confirm_password: confirmPassword,
+        },
+        {
+          onSuccess: () => {
+            setSnackBarMessage("Signup successful!");
+            setOpen(true);
+            setTimeout(() => {
+              navigate("/");
+            }, 1000);
+          },
+          onError: (error) => {
+            setSnackBarMessage("Signup failed!" + error);
+            setOpen(true);
+          },
+        }
+      );
     },
-    [submitData]
+    [navigate, type, useLoginMutation, useSignUpMutation]
   );
+
+  const handleClose = useCallback(() => {
+    setOpen(false);
+  }, []);
 
   return (
     <Box className="column flex-c">
       <Box
         className="column"
         sx={{
-          my: 8,
+          my: 4,
           mx: 4,
           width: "50%",
           [theme.breakpoints.down("tablet")]: {
-            width: "100%",
+            width: "calc(100% - 4rem)",
           },
         }}>
+        <Typography
+          className="row flex-ac"
+          sx={{
+            color: "#A5A5A5",
+            alignSelf: "flex-start",
+            mb: 4,
+            fontFamily: "Lexend Deca",
+            fontSize: "1.6rem",
+            gap: "0.8rem",
+            fontWeight: "300",
+          }}>
+          <Link to="/">
+            <ArrowLeftIcon sx={{ height: "1.6rem", width: "1.6rem" }} /> Home
+          </Link>
+        </Typography>
+        <Snackbar
+          open={open}
+          autoHideDuration={5000}
+          sx={{
+            width: "20%",
+            fontSize: "1.6rem",
+            left: "auto",
+          }}
+          TransitionComponent={SlideTransition}
+          onClose={handleClose}
+          message={snackBarMessage}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+        />
         <Box
           sx={{
             alignSelf: "flex-start",
