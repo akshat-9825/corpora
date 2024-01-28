@@ -1,36 +1,163 @@
-import { Box, Button, TextField, Typography, useTheme } from "@mui/material";
-import { Link } from "react-router-dom";
-
-interface AuthenticationType {
-  type: "login" | "signup";
-}
+import { useCallback, useState } from "react";
+import { useMutation } from "react-query";
+import {
+  Box,
+  Button,
+  Snackbar,
+  TextField,
+  Typography,
+  useTheme,
+} from "@mui/material";
+import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
+import { Link, useNavigate } from "react-router-dom";
+import { LoginApiCall, SignupApiCall } from "./apis";
+import {
+  AuthenticationType,
+  LoginDataType,
+  SignUpDataType,
+  SlideTransition,
+} from "./utils";
 
 const Authentication = ({ type }: AuthenticationType) => {
   const theme = useTheme();
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      name: data.get("name"),
-      password: data.get("password"),
-      confirmPassword: data.get("confirm_password"),
-    });
-  };
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const [snackBarMessage, setSnackBarMessage] = useState("");
+
+  const useSignUpMutation = useMutation((data: SignUpDataType) =>
+    SignupApiCall(data)
+  );
+
+  const useLoginMutation = useMutation((data: LoginDataType) =>
+    LoginApiCall(data)
+  );
+
+  const handleSubmit = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      const data = new FormData(event.currentTarget);
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const email = data.get("email") as string;
+      if (!emailRegex.test(email)) {
+        setSnackBarMessage("Invalid email address");
+        setOpen(true);
+        return;
+      }
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+      const password = data.get("password") as string;
+      if (password === "") {
+        setSnackBarMessage("Password cannot be empty");
+        setOpen(true);
+        return;
+      }
+      if (!passwordRegex.test(password)) {
+        setSnackBarMessage(
+          "Invalid password. Password must be at least 8 characters long and include at least" +
+            "one uppercase letter, one lowercase letter, and one digit."
+        );
+        setOpen(true);
+        return;
+      }
+      if (type === "login") {
+        useLoginMutation.mutate(
+          {
+            email,
+            password,
+          },
+          {
+            onSuccess: () => {
+              setSnackBarMessage("Login successful!");
+              setOpen(true);
+              setTimeout(() => {
+                navigate("/");
+              }, 1000);
+            },
+            onError: (error) => {
+              setSnackBarMessage("Login failed!" + error);
+              setOpen(true);
+            },
+          }
+        );
+        return;
+      }
+      const confirmPassword = data.get("confirm_password") as string;
+      if (password !== confirmPassword) {
+        setSnackBarMessage("Passwords do not match");
+        setOpen(true);
+        return;
+      }
+      useSignUpMutation.mutate(
+        {
+          email,
+          username: data.get("name") as string,
+          password,
+          confirm_password: confirmPassword,
+        },
+        {
+          onSuccess: () => {
+            setSnackBarMessage("Signup successful!");
+            setOpen(true);
+            setTimeout(() => {
+              navigate("/");
+            }, 1000);
+          },
+          onError: (error) => {
+            setSnackBarMessage("Signup failed!" + error);
+            setOpen(true);
+          },
+        }
+      );
+    },
+    [navigate, type, useLoginMutation, useSignUpMutation]
+  );
+
+  const handleClose = useCallback(() => {
+    setOpen(false);
+  }, []);
 
   return (
-    <Box sx={{ display: "flex", justifyContent: "center" }}>
+    <Box className="column flex-c">
       <Box
+        className="column"
         sx={{
-          my: 8,
+          my: 4,
           mx: 4,
-          display: "flex",
-          flexDirection: "column",
           width: "50%",
           [theme.breakpoints.down("tablet")]: {
-            width: "100%",
+            width: "calc(100% - 4rem)",
           },
         }}>
+        <Typography
+          className="row flex-ac"
+          sx={{
+            color: "#A5A5A5",
+            alignSelf: "flex-start",
+            mb: 4,
+            fontFamily: "Lexend Deca",
+            fontSize: "1.6rem",
+            gap: "0.8rem",
+            fontWeight: "300",
+          }}>
+          <Link to="/">
+            <ArrowLeftIcon sx={{ height: "1.6rem", width: "1.6rem" }} /> Home
+          </Link>
+        </Typography>
+        <Snackbar
+          open={open}
+          autoHideDuration={5000}
+          sx={{
+            width: "20%",
+            fontSize: "1.6rem",
+            left: "auto",
+          }}
+          TransitionComponent={SlideTransition}
+          onClose={handleClose}
+          message={snackBarMessage}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+        />
         <Box
           sx={{
             alignSelf: "flex-start",
@@ -41,7 +168,7 @@ const Authentication = ({ type }: AuthenticationType) => {
           }}>
           <Typography
             sx={{
-              fontSize: "48px",
+              fontSize: "4.8rem",
               color: "white",
               fontFamily: "DM Serif Display",
             }}>
@@ -51,7 +178,7 @@ const Authentication = ({ type }: AuthenticationType) => {
             sx={{
               color: "#A5A5A5",
               fontFamily: "Lexend Deca",
-              fontSize: "24px",
+              fontSize: "2.4rem",
               fontWeight: "300",
             }}>
             {type === "login"
@@ -63,7 +190,7 @@ const Authentication = ({ type }: AuthenticationType) => {
           component="form"
           noValidate
           onSubmit={handleSubmit}
-          sx={{ mt: "37px" }}>
+          sx={{ mt: "3.7rem" }}>
           <TextField
             margin="normal"
             fullWidth
@@ -85,8 +212,9 @@ const Authentication = ({ type }: AuthenticationType) => {
               name="name"
               autoComplete="name"
               sx={{
-                mt: "22px",
+                mt: "2.2rem",
                 mb: 0,
+                fontSize: "1.6rem",
               }}
             />
           ) : null}
@@ -98,7 +226,8 @@ const Authentication = ({ type }: AuthenticationType) => {
             type="password"
             id="password"
             sx={{
-              my: "22px",
+              my: "2.2rem",
+              fontSize: "1.6rem",
             }}
           />
           {type === "signup" ? (
@@ -111,15 +240,14 @@ const Authentication = ({ type }: AuthenticationType) => {
               id="confirm_password"
               sx={{
                 mt: 0,
-                mb: "22px",
+                mb: "2.2rem",
+                fontSize: "1.6rem",
               }}
             />
           ) : null}
           <Box
+            className="row space-between"
             sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
               gap: 4,
               [theme.breakpoints.down("tablet")]: {
                 flexDirection: "column",
@@ -130,15 +258,15 @@ const Authentication = ({ type }: AuthenticationType) => {
                 type="submit"
                 variant="contained"
                 sx={{
-                  width: "180px",
-                  height: "60px",
+                  width: "18rem",
+                  height: "6rem",
                   ":hover": {
                     bgcolor: theme.palette.primary.main,
                   },
                   borderRadius: 0,
                   fontWeight: "600",
                   [theme.breakpoints.down("tablet")]: {
-                    height: "52px",
+                    height: "5.2rem",
                     width: "100%",
                   },
                 }}>
@@ -148,13 +276,12 @@ const Authentication = ({ type }: AuthenticationType) => {
             <Box>
               {type === "login" ? (
                 <Typography
+                  className="column"
                   sx={{
                     color: "#FFF",
                     fontFamily: "Lexend Deca",
-                    fontSize: "20px",
+                    fontSize: "2rem",
                     fontWeight: "400",
-                    display: "flex",
-                    flexDirection: "column",
                   }}>
                   don't have an account?
                   <Button
@@ -162,7 +289,7 @@ const Authentication = ({ type }: AuthenticationType) => {
                     sx={{
                       color: "#6EEB83",
                       fontFamily: "Lexend Deca",
-                      fontSize: "20px",
+                      fontSize: "2rem",
                       fontWeight: "400",
                       textTransform: "none",
                       p: 0,
@@ -174,13 +301,12 @@ const Authentication = ({ type }: AuthenticationType) => {
                 </Typography>
               ) : (
                 <Typography
+                  className="column"
                   sx={{
                     color: "#FFF",
                     fontFamily: "Lexend Deca",
-                    fontSize: "20px",
+                    fontSize: "2rem",
                     fontWeight: "400",
-                    display: "flex",
-                    flexDirection: "column",
                   }}>
                   already have an account?
                   <Button
@@ -188,7 +314,7 @@ const Authentication = ({ type }: AuthenticationType) => {
                     sx={{
                       color: "#6EEB83",
                       fontFamily: "Lexend Deca",
-                      fontSize: "20px",
+                      fontSize: "2rem",
                       fontWeight: "400",
                       textTransform: "none",
                       p: 0,

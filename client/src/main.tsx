@@ -1,10 +1,10 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import CorporaRoutes from "./CorporaRoutes.tsx";
-
-import ScopedCssBaseline from "@mui/material/ScopedCssBaseline";
+import { StrictMode } from "react";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { ThemeProvider, createTheme } from "@mui/material";
-import "./index.scss";
+import ReactDOM from "react-dom/client";
+import ScopedCssBaseline from "@mui/material/ScopedCssBaseline";
+import CorporaRoutes from "./CorporaRoutes.tsx";
+import "./styles/global.scss";
 
 declare module "@mui/material/styles" {
   interface BreakpointOverrides {
@@ -20,6 +20,8 @@ declare module "@mui/material/styles" {
     largeDesktop: true;
   }
 }
+
+const queryClient = new QueryClient();
 
 const darkTheme = createTheme({
   palette: {
@@ -39,13 +41,33 @@ const darkTheme = createTheme({
       largeDesktop: 1440,
     },
   },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          fontSize: "1.6rem",
+        },
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          ".MuiTextField-root.MuiTextField-root": {
+            fontSize: "1.6rem",
+          },
+        },
+      },
+    },
+  },
 });
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
+  <StrictMode>
     <ScopedCssBaseline />
-    <ThemeProvider theme={darkTheme}>
-      <CorporaRoutes />
-    </ThemeProvider>
-  </React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={darkTheme}>
+        <CorporaRoutes />
+      </ThemeProvider>
+    </QueryClientProvider>
+  </StrictMode>
 );
