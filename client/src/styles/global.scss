@@ -20,25 +20,12 @@ html {
   font-size: 10px;
 }
 
-#root {
-  height: 100%;
-  width: 100%;
-
-  --background-color: #dae5f5;
-  --group-hover-color: #eaeff4;
-  --group-selected-color: #2f2f2f2b;
-  --button-color: #16008b;
-  --button-text-color: #fff;
-  --button-hover-color: #0047ff;
-  --header-background-color: #001f8b;
-}
-
 body {
   margin: 0;
-  display: flex;
   width: 100%;
   min-height: 100vh;
   font-size: $body-font-size;
+  overflow-x: hidden;
 }
 
 a {

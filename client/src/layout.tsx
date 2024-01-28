@@ -20,7 +20,11 @@ const Layout = ({ children }: { children: ReactNode }) => {
     );
   } else {
     return (
-      <Box className="row">
+      <Box
+        className="row"
+        sx={{
+          gap: "5.3rem",
+        }}>
         <Box position="static">
           <Box
             className="column flex-ac"
@@ -93,7 +97,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
                 </IconGroup>
               </Box>
             </Link>
-            <Link to="/create">
+            <Link to={isAuthenticated ? "/create" : "/login"}>
               <Box
                 className="full-width"
                 sx={{
@@ -114,7 +118,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
             </Link>
           </Box>
         </Box>
-        <Box>{children}</Box>
+        <div className="full-width">{children}</div>
       </Box>
     );
   }

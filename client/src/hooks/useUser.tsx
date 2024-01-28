@@ -17,7 +17,7 @@ interface ApiResponse {
 
 const useUser = () => {
   const [cookies] = useCookies(["token"]);
-
+  //TODO: Logout Functionality
   const { data, isError, isLoading } = useQuery<ApiResponse, Error>(
     "user",
     async () => {
