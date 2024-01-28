@@ -30,22 +30,20 @@ const Layout = ({ children }: { children: ReactNode }) => {
               borderRight: `0.1rem solid ${theme.palette.primary.main}`,
               width: "9.5rem",
             }}>
-            <Avatar
-              className="cursor"
-              sx={{
-                bgcolor: theme.palette.primary.main,
-                width: "6.6rem",
-                height: "6.6rem",
-                fontSize: "3.2rem",
-                marginTop: "9.8rem",
-                color: theme.palette.primary.dark,
-              }}>
-              {isAuthenticated ? (
-                <Link to="/profile">
-                  {user?.username[0].toUpperCase() || "U"}
-                </Link>
-              ) : (
-                <Link to="/login">
+            <Link to={!isAuthenticated ? "/login" : "/profile"}>
+              <Avatar
+                className="cursor"
+                sx={{
+                  bgcolor: theme.palette.primary.main,
+                  width: "6.6rem",
+                  height: "6.6rem",
+                  fontSize: "3.2rem",
+                  marginTop: "9.8rem",
+                  color: theme.palette.primary.dark,
+                }}>
+                {isAuthenticated ? (
+                  user?.username[0].toUpperCase() || "U"
+                ) : (
                   <LoginIcon
                     sx={{
                       height: "3rem",
@@ -54,9 +52,9 @@ const Layout = ({ children }: { children: ReactNode }) => {
                       mr: "0.4rem",
                     }}
                   />
-                </Link>
-              )}
-            </Avatar>
+                )}
+              </Avatar>
+            </Link>
             <Link to="/search">
               <Box
                 className="full-width"
