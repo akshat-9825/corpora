@@ -7,7 +7,8 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { Link, useLocation } from "react-router-dom";
 import LoginIcon from "@mui/icons-material/Login";
 import useUser from "./hooks/useUser";
-const Layout = ({ children }: { children: ReactNode }) => {
+
+const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
   const theme = useTheme();
   const location = useLocation();
   const { user, isAuthenticated } = useUser();

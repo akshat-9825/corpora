@@ -18,11 +18,11 @@ import {
   SlideTransition,
 } from "./utils";
 
-const Authentication = ({ type }: AuthenticationType) => {
+const Authentication: React.FC<AuthenticationType> = ({ type }) => {
   const theme = useTheme();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
   const navigate = useNavigate();
-  const [snackBarMessage, setSnackBarMessage] = useState("");
+  const [snackBarMessage, setSnackBarMessage] = useState<string>("");
 
   const useSignUpMutation = useMutation((data: SignUpDataType) =>
     SignupApiCall(data)

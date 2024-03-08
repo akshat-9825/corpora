@@ -1,4 +1,4 @@
-const Users = require("../models/Users");
+const Users = require("../models/users");
 const { createSecretToken } = require("../utils/SecretToken");
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
@@ -71,19 +71,19 @@ const Login = async (req, res, next) => {
   }
   try {
     const { email, phone, password } = req.body;
-    if (!(email || phone)) {
-      return res.json({ message: "Email or Phone required" });
+    if (!email || !phone) {
+      return res.status(400).json({ message: "Email or Phone required" });
     }
     if (!password) {
-      return res.json({ message: "Password required" });
+      return res.status(400).json({ message: "Password required" });
     }
     const user = await Users.findOne({ email });
     if (!user) {
-      return res.json({ message: "Incorrect password or email" });
+      return res.status(401).json({ message: "Incorrect password or email" });
     }
     const auth = await bcrypt.compare(password, user.password);
     if (!auth) {
-      return res.json({ message: "Incorrect password or email" });
+      return res.status(401).json({ message: "Incorrect password or email" });
     }
     const token = createSecretToken(user._id);
     res.cookie("token", token, {
@@ -95,7 +95,7 @@ const Login = async (req, res, next) => {
       .json({ message: "User logged in successfully", success: true });
     next();
   } catch (error) {
-    res.json({ message: error.message });
+    res.status(401).json({ message: error.message });
     console.error(error);
   }
 };
