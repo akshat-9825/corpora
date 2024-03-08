@@ -3,33 +3,12 @@ const { createSecretToken } = require("../utils/SecretToken");
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-
-/**
- * Checks if the given password matches the confirmed password.
- *
- * @param {string} password - The password to be checked.
- * @param {string} confirmPassword - The confirmed password for comparison.
- * @return {boolean} Returns true if the password matches the confirmed password, false otherwise.
- */
-function checkPasswordMatch(password, confirmPassword) {
-  return password === confirmPassword;
-}
-
-/**
- * Capitalizes the first letter of a word.
- *
- * @param {string} word - The word to be capitalized.
- * @return {string} The capitalized word.
- */
-const Capitalize = (word) => {
-  const capitalized = word.charAt(0).toUpperCase() + word.slice(1);
-  return capitalized;
-};
+const { checkPasswordMatch, Capitalize } = require("../utils");
 
 /**
  * Signup function that handles user registration.
  */
-module.exports.Signup = async (req, res, next) => {
+const Signup = async (req, res, next) => {
   try {
     const {
       email,
@@ -85,7 +64,11 @@ module.exports.Signup = async (req, res, next) => {
 /**
  * Login function. Handles user login and authentication.
  */
-module.exports.Login = async (req, res, next) => {
+const Login = async (req, res, next) => {
+  const token = req.cookies.token;
+  if (token) {
+    return res.json({ status: false, message: "User already logged in." });
+  }
   try {
     const { email, phone, password } = req.body;
     if (!(email || phone)) {
@@ -124,7 +107,7 @@ module.exports.Login = async (req, res, next) => {
  * @param {Object} res - the response object
  * @return {Object} the response object with status and message properties
  */
-module.exports.Delete = (req, res) => {
+const Delete = (req, res) => {
   const token = req.cookies.token;
   if (!token) {
     return res.json({ status: false, message: "User not logged in." });
@@ -144,7 +127,7 @@ module.exports.Delete = (req, res) => {
 /**
  * Modify function modifies the username of a user.
  */
-module.exports.Modify = (req, res) => {
+const Modify = (req, res) => {
   const token = req.cookies.token;
   const { new_name } = req.body;
 
@@ -180,3 +163,5 @@ module.exports.Modify = (req, res) => {
     }
   });
 };
+
+module.exports = { Login, Signup, Delete, Modify };
